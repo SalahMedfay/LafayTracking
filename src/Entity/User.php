@@ -17,8 +17,30 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TestLevel", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $testLevel;
+
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function getTestLevel(): ?TestLevel
+    {
+        return $this->testLevel;
+    }
+
+    public function setTestLevel(TestLevel $testLevel): self
+    {
+        $this->testLevel = $testLevel;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $testLevel->getUser()) {
+            $testLevel->setUser($this);
+        }
+
+        return $this;
     }
 }
